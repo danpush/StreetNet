@@ -99,6 +99,7 @@ def update_window():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument('model_path',  help='path to model, currently model_50.pt or model_18.pt')
     parser.add_argument(
         "--use-cuda", action="store_true", help="instead of running on cpu, run on gpu"
     )
@@ -109,10 +110,9 @@ if __name__ == "__main__":
 
     device = "cuda" if torch.cuda.is_available() and args.use_cuda else "cpu"
     counties_path = "countries.json"
-    model_path = "model.pt"
 
     class_names = json.load(open("countries.json"))
-    model = torch.load(model_path, map_location=device)
+    model = torch.load(args.model_path, map_location=device)
     model.eval()
 
     final_layer = model.layer4
