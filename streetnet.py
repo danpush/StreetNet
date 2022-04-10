@@ -1,3 +1,4 @@
+import argparse
 import json
 import matplotlib.pyplot as plt
 import mss
@@ -29,7 +30,7 @@ def take_screenshot():
 
     image = image.convert("RGB")
     width, height = (29 * 20, 18 * 20)
-    image = image.resize((width, height), Image.ANTIALIAS)
+    image = image.resize((width, height), Image.Resampling.LANCZOS)
     new_width, new_height = (29 * 18, 18 * 18)
     left = (width - new_width) / 2
     top = (height - new_height) / 2
@@ -45,6 +46,8 @@ def take_screenshot():
 
 def make_prediction():
     image_tensor, image = take_screenshot()
+    if next(model.parameters()).is_cuda:
+        image_tensor = image_tensor.to(device="cuda")
 
     data = torch.unsqueeze(
         image_tensor, dim=0
@@ -72,7 +75,7 @@ def make_prediction():
     cm = plt.get_cmap("jet")
     cam_img = cm(cam_img)
     heatmap_image = Image.fromarray((cam_img[:, :, :3] * 255).astype(np.uint8))
-    heatmap_image = heatmap_image.resize(image.size, Image.ANTIALIAS)
+    heatmap_image = heatmap_image.resize(image.size, Image.Resampling.LANCZOS)
 
     # Overlay heatmap on top of original image
     mask_im = Image.new("L", image.size, 0)
@@ -95,11 +98,21 @@ def update_window():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--use-cuda", action="store_true", help="instead of running on cpu, run on gpu"
+    )
+    args = parser.parse_args()
+    assert (
+        torch.cuda.is_available() or not args.use_cuda
+    ), "Requested to use cuda, however cuda is not available"
+
+    device = "cuda" if torch.cuda.is_available() and args.use_cuda else "cpu"
     counties_path = "countries.json"
     model_path = "model.pt"
 
     class_names = json.load(open("countries.json"))
-    model = torch.load(model_path, map_location="cpu")
+    model = torch.load(model_path, map_location=device)
     model.eval()
 
     final_layer = model.layer4

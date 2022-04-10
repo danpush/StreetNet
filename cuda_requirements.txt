@@ -1,0 +1,7 @@
+matplotlib==3.5.1
+mss==6.1.0
+numpy==1.22.3
+Pillow==9.1.0
+torch --extra-index-url https://download.pytorch.org/whl/cu113
+torchvision --extra-index-url https://download.pytorch.org/whl/cu113
+torchaudio --extra-index-url https://download.pytorch.org/whl/cu113

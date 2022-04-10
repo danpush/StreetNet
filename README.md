@@ -6,13 +6,9 @@ AI trained to play [country streaks on GeoGuessr](https://www.geoguessr.com/coun
 
 ## How To Use
 
-To use simply clone this repo, install the requirements: 
+To use, simply clone this repo, install the requirements (`requirements.txt` or `cuda_requirements.txt`) and run with python:
 ```bash
-pip install -r requirements.txt
-```
-And run with python:
-```bash
-python streetnet.py
+python streetnet.py [--use-cuda]
 ```
 You can test StreetNet by playing a game of GeoGuessr, or by simply dropping into a random location on Google Maps!
 
