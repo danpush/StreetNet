@@ -10,7 +10,7 @@ You can test StreetNet by playing a game of GeoGuessr, or by simply dropping int
 
 To run, simply clone this repo, install the requirements (`requirements.txt` or `cuda_requirements.txt`) and run with python:
 ```
-python streetnet.py model_name [--use-cuda]
+python streetnet.py [--use-cuda] model_name
 ```
 
 Currently there are 2 trained models included in this repo: `model_18.pt` and `model_50.pt`. These use the ResNet-18 and the ResNet-50 architectures respectively. `model_50.pt` achieves a higher accuracy, however it can require up to 10.6GB of memory so you may prefer using more light-weight version - `model_18.pt`.

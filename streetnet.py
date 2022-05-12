@@ -99,9 +99,12 @@ def update_window():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('model_path',  help='path to model, currently model_50.pt or model_18.pt')
     parser.add_argument(
-        "--use-cuda", action="store_true", help="instead of running on cpu, run on gpu"
+        "model_path",
+        help="path to model, currently models/model_50.pt or models/model_18.pt",
+    )
+    parser.add_argument(
+        "--use-cuda", action="store_true", help="run on gpu instead of cpu"
     )
     args = parser.parse_args()
     assert (
@@ -112,7 +115,12 @@ if __name__ == "__main__":
     counties_path = "countries.json"
 
     class_names = json.load(open("countries.json"))
-    model = torch.load(args.model_path, map_location=device)
+    try:
+        model = torch.load(args.model_path, map_location=device)
+    except FileNotFoundError as e:
+        raise FileNotFoundError(
+            f"No such file or directory: '{args.model_path}'. Did you mean 'models/{args.model_path}'?"
+        ) from e
     model.eval()
 
     final_layer = model.layer4
