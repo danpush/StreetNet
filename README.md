@@ -14,7 +14,3 @@ python streetnet.py [--use-cuda] model_name
 ```
 
 Currently there are 2 trained models included in this repo: `model_18.pt` and `model_50.pt`. These use the ResNet-18 and the ResNet-50 architectures respectively. `model_50.pt` achieves a higher accuracy, however it can require up to 10.6GB of memory so you may prefer using more light-weight version - `model_18.pt`.
-
-## Training
-
-TODO: Jupyter Notebook and info on dataset and training will be added soon
